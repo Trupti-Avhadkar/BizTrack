@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#102a56"><meta name="description" content="BizTrack small business manager">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg">
+<title>BizTrack — Small Business Manager</title><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">B</div><div><strong>BizTrack</strong><small>Small Business Manager</small></div></div>
+    <button class="icon-btn" id="exportTop" aria-label="Export records" title="Export records">⇩</button>
+  </header>
+  <main id="appMain">
+    <section class="page active" id="page-home">
+      <div class="welcome"><div><p class="eyebrow">BUSINESS OVERVIEW</p><h1>Good business starts here.</h1><p class="muted">Your store at a glance.</p></div><span class="date-pill" id="todayLabel"></span></div>
+      <div class="metric-grid">
+        <article class="metric-card"><span class="metric-icon blue">↗</span><p>Total sales</p><strong id="totalSales">₹0</strong><small id="salesCount">0 transactions</small></article>
+        <article class="metric-card"><span class="metric-icon violet">−</span><p>Total expenses</p><strong id="totalExpenses">₹0</strong><small id="expenseCount">0 entries</small></article>
+        <article class="metric-card"><span class="metric-icon green">↗</span><p>Net profit</p><strong id="netProfit">₹0</strong><small>Sales minus expenses</small></article>
+        <article class="metric-card"><span class="metric-icon amber">▦</span><p>Units in stock</p><strong id="stockCount">0</strong><small id="productCount">0 products</small></article>
+      </div>
+      <div class="section-heading"><div><h2>Quick actions</h2><p class="muted">Get things done faster</p></div></div>
+      <div class="quick-grid">
+        <button class="quick-action" data-go="products"><span class="quick-icon">＋</span><span><b>Add product</b><small>Manage inventory</small></span><span class="chevron">›</span></button>
+        <button class="quick-action" data-go="sales"><span class="quick-icon sale">↗</span><span><b>Record sale</b><small>Track a transaction</small></span><span class="chevron">›</span></button>
+        <button class="quick-action" data-go="expenses"><span class="quick-icon expense">−</span><span><b>Add expense</b><small>Log business costs</small></span><span class="chevron">›</span></button>
+      </div>
+      <div class="section-heading"><div><h2>Low-stock alerts</h2><p class="muted">Products with 5 units or fewer</p></div><button class="text-btn" data-go="products">View all</button></div>
+      <div id="lowStockList" class="list-card"></div>
+      <div class="section-heading"><div><h2>Recent transactions</h2><p class="muted">Latest sales and expenses</p></div><button class="text-btn" data-go="reports">View reports</button></div>
+      <div id="recentList" class="list-card"></div>
+    </section>
+
+    <section class="page" id="page-products">
+      <div class="page-title"><div><p class="eyebrow">INVENTORY</p><h1>Products</h1><p class="muted">Keep your stock organized.</p></div><button class="primary-btn" id="addProductBtn">＋ Add product</button></div>
+      <div class="toolbar"><label class="search-box"><span>⌕</span><input id="productSearch" placeholder="Search products..." aria-label="Search products"></label><span class="count-chip" id="productTotal">0 items</span></div>
+      <div id="productsList" class="data-list"></div>
+    </section>
+
+    <section class="page" id="page-sales">
+      <div class="page-title"><div><p class="eyebrow">REVENUE</p><h1>Sales</h1><p class="muted">Record sales and update stock automatically.</p></div></div>
+      <div class="form-card"><h2>Record a sale</h2><form id="saleForm">
+        <label>Product<select id="saleProduct" required></select></label>
+        <div class="form-row"><label>Quantity<input id="saleQty" type="number" min="1" step="1" value="1" required></label><label>Unit price (₹)<input id="salePrice" type="number" min="0" step=".01" required></label></div>
+        <div class="total-preview"><span>Sale total</span><strong id="salePreview">₹0.00</strong></div>
+        <button class="primary-btn full" type="submit">Save sale</button>
+      </form></div>
+      <div class="section-heading"><div><h2>Sales history</h2><p class="muted">Your recorded transactions</p></div><span class="count-chip" id="salesHistoryCount">0 sales</span></div>
+      <div id="salesList" class="data-list"></div>
+    </section>
+
+    <section class="page" id="page-expenses">
+      <div class="page-title"><div><p class="eyebrow">COSTS</p><h1>Expenses</h1><p class="muted">Keep track of business spending.</p></div></div>
+      <div class="form-card"><h2>Add an expense</h2><form id="expenseForm">
+        <label>Expense name<input id="expenseName" placeholder="e.g. Shop rent" maxlength="80" required></label>
+        <div class="form-row"><label>Category<select id="expenseCategory"><option>Rent</option><option>Utilities</option><option>Supplies</option><option>Transport</option><option>Marketing</option><option>Salary</option><option>Other</option></select></label><label>Amount (₹)<input id="expenseAmount" type="number" min=".01" step=".01" placeholder="0.00" required></label></div>
+        <label>Date<input id="expenseDate" type="date" required></label>
+        <button class="primary-btn full" type="submit">Save expense</button>
+      </form></div>
+      <div class="section-heading"><div><h2>Expense history</h2><p class="muted">Your recorded costs</p></div><span class="count-chip" id="expenseHistoryCount">0 expenses</span></div>
+      <div id="expensesList" class="data-list"></div>
+    </section>
+
+    <section class="page" id="page-reports">
+      <div class="page-title"><div><p class="eyebrow">BUSINESS INSIGHTS</p><h1>Reports</h1><p class="muted">Understand your business performance.</p></div><button class="secondary-btn" id="exportBtn">⇩ Export CSV</button></div>
+      <div class="report-summary"><div><span>Total sales</span><strong id="reportSales">₹0</strong></div><div><span>Total expenses</span><strong id="reportExpenses">₹0</strong></div><div><span>Net profit</span><strong id="reportProfit">₹0</strong></div></div>
+      <div class="chart-card"><div class="section-heading compact"><div><h2>Sales vs expenses</h2><p class="muted">All recorded activity</p></div></div><div id="comparisonChart" class="bar-chart"></div><div class="chart-legend"><span><i class="dot sales-dot"></i>Sales</span><span><i class="dot expense-dot"></i>Expenses</span></div></div>
+      <div class="chart-card"><div class="section-heading compact"><div><h2>Sales by product</h2><p class="muted">Revenue contribution</p></div></div><div id="productChart" class="horizontal-chart"></div></div>
+      <div class="export-note"><span class="note-icon">✓</span><div><b>Your records stay on this device</b><p>Export CSV regularly to keep a backup. This demo app stores data in this browser's local storage.</p></div></div>
+      <button class="danger-outline full" id="resetDemoBtn">Reset all app data</button>
+    </section>
+  </main>
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <button class="nav-item active" data-page="home"><span>⌂</span><small>Home</small></button>
+    <button class="nav-item" data-page="products"><span>▦</span><small>Products</small></button>
+    <button class="nav-item" data-page="sales"><span>↗</span><small>Sales</small></button>
+    <button class="nav-item" data-page="expenses"><span>−</span><small>Expenses</small></button>
+    <button class="nav-item" data-page="reports"><span>▥</span><small>Reports</small></button>
+  </nav>
+</div>
+
+<dialog id="productDialog" class="modal"><form id="productForm" method="dialog"><div class="modal-head"><div><p class="eyebrow">INVENTORY ITEM</p><h2 id="productDialogTitle">Add product</h2></div><button type="button" class="close-btn" data-close="productDialog" aria-label="Close">×</button></div>
+<input type="hidden" id="productId"><label>Product name<input id="productName" maxlength="80" placeholder="e.g. Notebook" required></label>
+<div class="form-row"><label>Category<input id="productCategory" maxlength="50" placeholder="e.g. Stationery" required></label><label>Price (₹)<input id="productPrice" type="number" min="0" step=".01" placeholder="0.00" required></label></div>
+<label>Stock quantity<input id="productStock" type="number" min="0" step="1" placeholder="0" required></label>
+<div class="modal-actions"><button type="button" class="secondary-btn" data-close="productDialog">Cancel</button><button type="submit" class="primary-btn">Save product</button></div></form></dialog>
+<div id="toast" role="status" aria-live="polite" class="toast"></div>
+<script src="app.js"></script>
+</body></html>
